@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0b0d">
+<title>Power Fit — Controle de acesso</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="acessos">
+
+<div id="sidebar-root"></div>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="app-main">
+  <div id="topbar-root"></div>
+  <main class="content">
+<section class="page" id="page-acessos">
+      <div class="page-head">
+        <div>
+          <h1>Controle de acesso</h1>
+          <p>Validação de plano, catraca e histórico de entradas</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-ghost" onclick="toast('Integração com catraca configurada.','green')">
+            <svg class="i"><use href="#i-qr"/></svg> Integrar leitor
+          </button>
+          <button class="btn btn-orange" onclick="toast('Histórico de acessos exportado.','orange')">
+            <svg class="i"><use href="#i-download"/></svg> Exportar
+          </button>
+        </div>
+      </div>
+
+      <div class="metrics metrics-3">
+        <div class="metric">
+          <div class="metric-head">
+            <div class="metric-icon dark"><svg class="i"><use href="#i-door"/></svg></div>
+            <span class="badge badge-green">Hoje</span>
+          </div>
+          <div class="metric-value">87</div>
+          <div class="metric-label">Acessos registrados</div>
+          <div class="metric-foot"><span class="muted">Pico às 18h · 12 agora</span></div>
+        </div>
+        <div class="metric">
+          <div class="metric-head">
+            <div class="metric-icon green"><svg class="i"><use href="#i-check"/></svg></div>
+            <span class="badge badge-green">Liberados</span>
+          </div>
+          <div class="metric-value">82</div>
+          <div class="metric-label">Entradas liberadas</div>
+          <div class="metric-foot"><span class="muted">94,2% do total</span></div>
+        </div>
+        <div class="metric">
+          <div class="metric-head">
+            <div class="metric-icon orange"><svg class="i"><use href="#i-lock"/></svg></div>
+            <span class="badge badge-orange">Bloqueados</span>
+          </div>
+          <div class="metric-value">5</div>
+          <div class="metric-label">Tentativas bloqueadas</div>
+          <div class="metric-foot"><span class="muted">Mensalidade em atraso</span></div>
+        </div>
+      </div>
+
+      <div class="grid-2 equal">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Validar acesso</div>
+            <span class="badge badge-green">Catraca online</span>
+          </div>
+          <div class="card-body">
+            <div class="access-panel">
+              <div class="qr-box"><svg class="i"><use href="#i-qr"/></svg></div>
+              <h3>Leitor de acesso</h3>
+              <p>Digite a matrícula ou aproxime o QR Code do aluno para validar o plano.</p>
+              <form class="access-form" onsubmit="validarAcesso(event)">
+                <input class="input" id="accessInput" placeholder="Matrícula ou nome do aluno" autocomplete="off">
+                <button class="btn btn-green" type="submit">Validar</button>
+              </form>
+              <button class="btn btn-ghost btn-sm" onclick="simularQR()">
+                <svg class="i"><use href="#i-qr"/></svg> Simular leitura de QR Code
+              </button>
+              <div class="access-result" id="accessResult"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Fluxo de acessos</div>
+              <div class="card-sub">Hoje · 06h às 22h</div>
+            </div>
+            <span class="badge badge-gray">87 entradas</span>
+          </div>
+          <div class="card-body">
+            <div class="mini-bars" id="accessChart"></div>
+            <div class="mini-labels"><span>06h</span><span>09h</span><span>12h</span><span>15h</span><span>18h</span><span>21h</span></div>
+            <div class="legend-inline">
+              <span><b>Pico:</b> 18h–19h</span>
+              <span><b>Média:</b> 5,4 acessos/h</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-16">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Histórico de acessos</div>
+            <div class="card-sub">Registros de entrada e validação de plano</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="renderAcessos();toast('Histórico atualizado.','green')">Atualizar</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Aluno</th><th>Matrícula</th><th>Data / hora</th><th>Status</th></tr></thead>
+            <tbody id="acessosBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+
+
+<div class="toasts" id="toasts"></div>
+
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/acessos.js"></script>
+</body>
+</html>

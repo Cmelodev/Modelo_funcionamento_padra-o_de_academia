@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0b0d">
+<title>Power Fit — Fichas de treino</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="treinos">
+
+<div id="sidebar-root"></div>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="app-main">
+  <div id="topbar-root"></div>
+  <main class="content">
+<section class="page" id="page-treinos">
+      <div class="page-head">
+        <div>
+          <h1>Fichas de treino</h1>
+          <p>Treinos montados pelos professores e vinculados aos alunos</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-orange" onclick="abrirFichaModal()">
+            <svg class="i"><use href="#i-plus"/></svg> Nova ficha
+          </button>
+        </div>
+      </div>
+
+      <div class="workout-grid" id="fichasGrid"></div>
+    </section>
+  </main>
+</div>
+
+<!-- ================= MODAL: NOVA FICHA ================= -->
+<div class="modal" id="modal-ficha">
+  <div class="modal-backdrop" onclick="closeModal('modal-ficha')"></div>
+  <div class="modal-card" style="max-width:700px">
+    <div class="modal-head">
+      <div>
+        <h3>Nova ficha de treino</h3>
+        <p>Monte o treino e vincule ao aluno</p>
+      </div>
+      <button class="icon-btn" onclick="closeModal('modal-ficha')" aria-label="Fechar">
+        <svg class="i"><use href="#i-x"/></svg>
+      </button>
+    </div>
+    <form onsubmit="salvarFicha(event)">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="field">
+            <label>Aluno *</label>
+            <select class="input" id="fi-aluno" required></select>
+          </div>
+          <div class="field">
+            <label>Professor *</label>
+            <select class="input" id="fi-prof" required>
+              <option>Rafael Souza</option>
+              <option>Amanda Lima</option>
+              <option>Bruno Carvalho</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Objetivo *</label>
+            <select class="input" id="fi-objetivo" required>
+              <option>Hipertrofia</option>
+              <option>Emagrecimento</option>
+              <option>Resistência</option>
+              <option>Força</option>
+              <option>Reabilitação</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Divisão *</label>
+            <input class="input" id="fi-dias" value="A/B/C" placeholder="Ex.: A/B/C" required>
+          </div>
+        </div>
+
+        <div class="ex-head">
+          <label>Exercícios</label>
+          <button type="button" class="btn btn-orange btn-sm" onclick="addExerciseRow()">
+            <svg class="i"><use href="#i-plus"/></svg> Adicionar exercício
+          </button>
+        </div>
+        <div class="ex-labels">
+          <span>Exercício</span><span>Séries</span><span>Reps</span><span>Carga</span><span></span>
+        </div>
+        <div id="exRows"></div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('modal-ficha')">Cancelar</button>
+        <button type="submit" class="btn btn-green">
+          <svg class="i"><use href="#i-check"/></svg> Salvar ficha
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ================= MODAL: VER FICHA ================= -->
+<div class="modal" id="modal-ficha-view">
+  <div class="modal-backdrop" onclick="closeModal('modal-ficha-view')"></div>
+  <div class="modal-card" style="max-width:620px">
+    <div class="modal-head">
+      <div>
+        <h3 id="vf-title">Ficha de treino</h3>
+        <p>Detalhes do treino do aluno</p>
+      </div>
+      <button class="icon-btn" onclick="closeModal('modal-ficha-view')" aria-label="Fechar">
+        <svg class="i"><use href="#i-x"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="vf-body"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-ficha-view')">Fechar</button>
+      <button class="btn btn-green" onclick="toast('Ficha enviada para o aluno.','green')">
+        <svg class="i"><use href="#i-check"/></svg> Enviar ao aluno
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/treinos.js"></script>
+</body>
+</html>
