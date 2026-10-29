@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0b0d">
+<title>Power Fit — Dashboard</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="dashboard">
+
+<div id="sidebar-root"></div>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="app-main">
+  <div id="topbar-root"></div>
+  <main class="content">
+<section class="page active" id="page-dashboard">
+      <div class="page-head">
+        <div>
+          <h1>Dashboard</h1>
+          <p>Visão geral da academia · Outubro de 2026</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-ghost" onclick="toast('Filtro de período em desenvolvimento.','green')">
+            <svg class="i"><use href="#i-calendar"/></svg> Outubro 2026
+          </button>
+          <a class="btn btn-green" href="alunos.html?novo=1">
+            <svg class="i"><use href="#i-plus"/></svg> Novo aluno
+          </a>
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-head">
+            <div class="metric-icon green"><svg class="i"><use href="#i-users"/></svg></div>
+            <span class="trend up"><svg class="i" style="width:11px;height:11px"><use href="#i-up"/></svg> 4,8%</span>
+          </div>
+          <div class="metric-value">128</div>
+          <div class="metric-label">Alunos ativos</div>
+          <div class="metric-foot"><span class="muted">de 132 cadastrados</span></div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-head">
+            <div class="metric-icon orange"><svg class="i"><use href="#i-alert"/></svg></div>
+            <span class="trend down"><svg class="i" style="width:11px;height:11px"><use href="#i-up"/></svg> 2 novos</span>
+          </div>
+          <div class="metric-value">14</div>
+          <div class="metric-label">Alunos inadimplentes</div>
+          <div class="metric-foot"><span class="muted">R$ 1.890,00 em atraso</span></div>
+        </div>
+
+        <div class="metric dark">
+          <div class="metric-head">
+            <div class="metric-icon green"><svg class="i"><use href="#i-card"/></svg></div>
+            <span class="trend up"><svg class="i" style="width:11px;height:11px"><use href="#i-up"/></svg> 12,4%</span>
+          </div>
+          <div class="metric-value">R$ 18.450</div>
+          <div class="metric-label">Faturamento do mês</div>
+          <div class="metric-foot"><span style="color:#a1a1aa">Meta: R$ 20.000</span></div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-head">
+            <div class="metric-icon dark"><svg class="i"><use href="#i-door"/></svg></div>
+            <span class="trend up"><svg class="i" style="width:11px;height:11px"><use href="#i-up"/></svg> 9%</span>
+          </div>
+          <div class="metric-value">87</div>
+          <div class="metric-label">Acessos hoje</div>
+          <div class="metric-foot"><span class="muted">Pico às 18h · 12 agora</span></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Faturamento mensal</div>
+              <div class="card-sub">Receita bruta dos últimos 6 meses</div>
+            </div>
+            <span class="badge badge-green">+12,4%</span>
+          </div>
+          <div class="card-body">
+            <div class="bars">
+              <div class="bar-col"><span class="bar-val">14,2k</span><div class="bar-track"><div class="bar" style="height:62%"></div></div><small>Mai</small></div>
+              <div class="bar-col"><span class="bar-val">15,4k</span><div class="bar-track"><div class="bar" style="height:67%"></div></div><small>Jun</small></div>
+              <div class="bar-col"><span class="bar-val">13,9k</span><div class="bar-track"><div class="bar" style="height:60%"></div></div><small>Jul</small></div>
+              <div class="bar-col"><span class="bar-val">16,8k</span><div class="bar-track"><div class="bar" style="height:76%"></div></div><small>Ago</small></div>
+              <div class="bar-col"><span class="bar-val">17,6k</span><div class="bar-track"><div class="bar" style="height:82%"></div></div><small>Set</small></div>
+              <div class="bar-col"><span class="bar-val">18,4k</span><div class="bar-track"><div class="bar hi" style="height:94%"></div></div><small>Out</small></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Planos ativos</div>
+              <div class="card-sub">Distribuição por modalidade</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="donut-wrap">
+              <div class="donut">
+                <div class="donut-center"><strong>132</strong><span>alunos</span></div>
+              </div>
+              <div class="legend">
+                <div class="legend-row"><span class="legend-dot" style="background:var(--green)"></span><span>Mensal</span><b>48%</b></div>
+                <div class="legend-row"><span class="legend-dot" style="background:var(--orange)"></span><span>Trimestral</span><b>27%</b></div>
+                <div class="legend-row"><span class="legend-dot" style="background:#111"></span><span>Semestral</span><b>17%</b></div>
+                <div class="legend-row"><span class="legend-dot" style="background:#d4d4d8"></span><span>Anual</span><b>8%</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2 rev">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Últimos acessos</div>
+              <div class="card-sub">Entradas registradas na catraca</div>
+            </div>
+            <a class="card-link" href="acessos.html">Ver todos <svg class="i" style="width:12px;height:12px"><use href="#i-chevron"/></svg></a>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Aluno</th><th>Horário</th><th>Status</th></tr></thead>
+              <tbody id="dashAcessos"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Mensalidades em atraso</div>
+              <div class="card-sub">Ação de cobrança prioritária</div>
+            </div>
+            <a class="card-link" href="financeiro.html">Ver todos</a>
+          </div>
+          <div class="overdue-list" id="dashAtrasados"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+
+
+<div class="toasts" id="toasts"></div>
+
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
