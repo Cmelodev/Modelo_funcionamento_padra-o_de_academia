@@ -14,19 +14,25 @@ const usuarioGoogle = {
 function lerAuth(){
   try {
     const valor = localStorage.getItem(AUTH_KEY);
-    return valor === null ? true : valor === '1';
+    if(!valor || valor === '0') return null;
+    if(valor === '1' || valor === 'admin') return { role:'admin' };
+    if(valor.startsWith('aluno:')) return { role:'aluno', nome: valor.slice(6) };
+    return null;
   } catch (erro) {
-    return true;
+    return { role:'admin' };
   }
 }
 
-function gravarAuth(logado){
+function gravarAuth(auth){
   try {
-    localStorage.setItem(AUTH_KEY, logado ? '1' : '0');
+    if(!auth) { localStorage.setItem(AUTH_KEY, '0'); return; }
+    if(auth.role === 'admin') localStorage.setItem(AUTH_KEY, 'admin');
+    else if(auth.role === 'aluno') localStorage.setItem(AUTH_KEY, 'aluno:' + auth.nome);
   } catch (erro) { /* armazenamento indisponível */ }
 }
 
-var contaGoogle = lerAuth();
+var auth = lerAuth();
+if(!auth) auth = { role:'admin' }; // padrão para demonstração
 
 /* ---------- Sidebar ---------- */
 const NAV_PRINCIPAL = [
@@ -39,6 +45,10 @@ const NAV_PRINCIPAL = [
 const NAV_TREINO = [
   { page:'treinos',    href:'treinos.html',    icone:'i-dumbbell', label:'Fichas de treino' },
   { page:'relatorios', href:'relatorios.html', icone:'i-chart',    label:'Relatórios' }
+];
+
+const NAV_PORTAL = [
+  { page:'aluno', href:'aluno.html', icone:'i-user', label:'Portal do aluno' }
 ];
 
 function itemNav(item){
@@ -55,6 +65,9 @@ function itemNav(item){
 function montarSidebar(){
   const raiz = document.getElementById('sidebar-root');
   if(!raiz) return;
+
+const isAdmin = auth && auth.role === 'admin';
+  const isAluno = auth && auth.role === 'aluno';
 
   raiz.innerHTML = `
     <aside class="sidebar" id="sidebar">
@@ -74,10 +87,14 @@ function montarSidebar(){
       </div>
 
       <nav class="nav">
+        ${isAdmin || !auth ? `
         <div class="nav-label">PRINCIPAL</div>
         ${NAV_PRINCIPAL.map(itemNav).join('')}
         <div class="nav-label">TREINAMENTO</div>
         ${NAV_TREINO.map(itemNav).join('')}
+        ` : ''}
+        <div class="nav-label">PORTAL</div>
+        ${NAV_PORTAL.map(itemNav).join('')}
       </nav>
 
       <div class="sidebar-foot">
@@ -138,21 +155,25 @@ function montarTopbar(){
           <div class="pm-status" id="pmStatus"><span class="dot-live"></span> Conta Google conectada</div>
           <div class="pm-divider"></div>
 
-          <button class="btn btn-logout btn-block" id="pmLogout" onclick="sairGoogle()">
+          <button class="btn btn-logout btn-block" id="pmLogout" onclick="sairConta()" style="display:none">
             <svg class="i"><use href="#i-logout"/></svg> Sair da conta
           </button>
 
-          <button class="btn btn-google btn-block" id="pmLogin" onclick="entrarGoogle()" style="display:none">
+          <button class="btn btn-google btn-block" id="pmLoginAdmin" onclick="entrarGoogle()" style="display:none">
             <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
               <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
               <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
               <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
               <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
             </svg>
-            Entrar com Google
+            Entrar como Administrador
           </button>
 
-          <p class="pm-hint" id="pmHint" style="display:none">Entre com sua conta Google para acessar os dados administrativos da academia.</p>
+          <button class="btn btn-green btn-block" id="pmLoginAluno" onclick="entrarAluno()" style="display:none">
+            <svg class="i"><use href="#i-user"/></svg> Entrar como Aluno
+          </button>
+
+          <p class="pm-hint" id="pmHint" style="display:none">Entre como administrador (Google) ou como aluno para acessar o sistema.</p>
         </div>
       </div>
     </header>`;
@@ -198,34 +219,64 @@ function closeProfileMenu(){
 function renderAuth(){
   if(!document.getElementById('profileName')) return;
 
-  $('#profileAvatar').textContent = contaGoogle ? usuarioGoogle.iniciais : '?';
-  $('#profileName').textContent = contaGoogle ? usuarioGoogle.nome : 'Visitante';
-  $('#profileRole').textContent = contaGoogle ? usuarioGoogle.cargo : 'Entrar com Google';
-  $('#pmAvatar').textContent = contaGoogle ? usuarioGoogle.iniciais : '?';
-  $('#pmName').textContent = contaGoogle ? usuarioGoogle.nome : 'Visitante';
-  $('#pmEmail').textContent = contaGoogle ? usuarioGoogle.email : 'Nenhuma conta conectada';
-  $('#pmStatus').style.display = contaGoogle ? 'flex' : 'none';
-  $('#pmLogout').style.display = contaGoogle ? 'flex' : 'none';
-  $('#pmLogin').style.display = contaGoogle ? 'none' : 'flex';
-  $('#pmHint').style.display = contaGoogle ? 'none' : 'block';
-  $('#profileAvatar').className = 'avatar' + (contaGoogle ? '' : ' gray');
-  $('#pmAvatar').className = 'avatar' + (contaGoogle ? '' : ' gray');
+  const isAdmin = auth && auth.role === 'admin';
+  const isAluno = auth && auth.role === 'aluno';
+  const nomeExibido = isAdmin ? usuarioGoogle.nome : (isAluno ? auth.nome : 'Visitante');
+  const emailExibido = isAdmin ? usuarioGoogle.email : (isAluno ? 'Aluno' : 'Nenhuma conta conectada');
+  const iniciaisExibidas = isAdmin ? usuarioGoogle.iniciais : (isAluno ? iniciais(auth.nome) : '?');
+  const cargoExibido = isAdmin ? usuarioGoogle.cargo : (isAluno ? 'Aluno' : 'Entrar no sistema');
+
+  $('#profileAvatar').textContent = iniciaisExibidas;
+  $('#profileName').textContent = nomeExibido;
+  $('#profileRole').textContent = cargoExibido;
+  $('#pmAvatar').textContent = iniciaisExibidas;
+  $('#pmName').textContent = nomeExibido;
+  $('#pmEmail').textContent = emailExibido;
+  $('#pmStatus').style.display = (isAdmin || isAluno) ? 'flex' : 'none';
+  $('#pmLogout').style.display = (isAdmin || isAluno) ? 'flex' : 'none';
+  $('#pmHint').style.display = (isAdmin || isAluno) ? 'none' : 'block';
+  $('#profileAvatar').className = 'avatar' + ((isAdmin || isAluno) ? '' : ' gray');
+  $('#pmAvatar').className = 'avatar' + ((isAdmin || isAluno) ? '' : ' gray');
+
+  // Atualiza botões de login (admin x aluno)
+  const loginAdmin = document.getElementById('pmLoginAdmin');
+  const loginAluno = document.getElementById('pmLoginAluno');
+  if(loginAdmin) loginAdmin.style.display = (isAdmin || isAluno) ? 'none' : 'flex';
+  if(loginAluno) loginAluno.style.display = (isAdmin || isAluno) ? 'none' : 'flex';
 }
 
 function entrarGoogle(){
-  contaGoogle = true;
-  gravarAuth(true);
+  auth = { role:'admin' };
+  gravarAuth(auth);
   renderAuth();
   closeProfileMenu();
-  toast('Login realizado com Google. Bem-vindo, ' + usuarioGoogle.nome + '!');
+  toast('Login realizado como Administrador. Bem-vindo, ' + usuarioGoogle.nome + '!');
+  if(document.body.dataset.page !== 'dashboard') window.location.href = 'index.html';
 }
 
-function sairGoogle(){
-  contaGoogle = false;
-  gravarAuth(false);
+function entrarAluno(){
+  const nome = prompt('Digite seu nome de aluno (conforme cadastro):');
+  if(!nome) return;
+  const aluno = db.alunos.find(a => a.nome.toLowerCase() === nome.trim().toLowerCase());
+  if(!aluno){
+    toast('Aluno não encontrado no cadastro.', 'orange');
+    return;
+  }
+  auth = { role:'aluno', nome: aluno.nome };
+  gravarAuth(auth);
   renderAuth();
   closeProfileMenu();
-  toast('Você saiu da conta. Para continuar, entre com o Google.', 'orange');
+  toast('Login realizado. Bem-vindo, ' + aluno.nome + '!');
+  window.location.href = 'aluno.html?aluno=' + encodeURIComponent(aluno.nome);
+}
+
+function sairConta(){
+  auth = null;
+  gravarAuth(null);
+  renderAuth();
+  closeProfileMenu();
+  toast('Você saiu da conta.', 'orange');
+  window.location.href = 'index.html';
 }
 
 /* ---------- Eventos globais ---------- */
@@ -242,3 +293,12 @@ document.addEventListener('keydown', e => {
 
 montarSidebar();
 montarTopbar();
+
+/* ---------- Guarda de permissão ---------- */
+(function(){
+  const pagina = document.body.dataset.page;
+  const isAluno = auth && auth.role === 'aluno';
+  if(isAluno && pagina !== 'aluno'){
+    window.location.replace('aluno.html?aluno=' + encodeURIComponent(auth.nome));
+  }
+})();

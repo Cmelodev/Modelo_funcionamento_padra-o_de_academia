@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0b0d">
+<title>Power Fit — Portal do Aluno</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="aluno">
+
+<div id="sidebar-root"></div>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="app-main">
+  <div id="topbar-root"></div>
+  <main class="content">
+    <section class="page active" id="page-aluno">
+      <div class="page-head">
+        <div>
+          <h1>Portal do Aluno</h1>
+          <p>Seus dados, plano e ficha de treino</p>
+        </div>
+        <div class="page-actions">
+          <select class="select" id="alunoSelector" onchange="selecionarAluno(this.value)"></select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Dados do aluno</div>
+              <div class="card-sub">Informações pessoais e do plano</div>
+            </div>
+          </div>
+          <div class="card-body" id="alunoDados"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Status do plano</div>
+              <div class="card-sub">Situação atual e último pagamento</div>
+            </div>
+          </div>
+          <div class="card-body" id="alunoPlano"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Ficha de treino</div>
+            <div class="card-sub">Exercícios, séries, repetições e cargas</div>
+          </div>
+        </div>
+        <div class="card-body" id="alunoFicha"></div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Meus acessos</div>
+            <div class="card-sub">Últimas entradas registradas</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Horário</th><th>Status</th></tr></thead>
+            <tbody id="alunoAcessos"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/aluno.js"></script>
+</body>
+</html>
