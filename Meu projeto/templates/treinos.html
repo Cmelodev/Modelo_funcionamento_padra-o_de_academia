@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+{% load static %}
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b0b0d">
 <title>Power Fit — Fichas de treino</title>
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body data-page="treinos">
 
@@ -123,10 +124,10 @@
 
 <div class="toasts" id="toasts"></div>
 
-<script src="js/data.js"></script>
-<script src="js/utils.js"></script>
-<script src="js/icons.js"></script>
-<script src="js/layout.js"></script>
-<script src="js/treinos.js"></script>
+<script src="{% static 'js/data.js' %}"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+<script src="{% static 'js/icons.js' %}"></script>
+<script src="{% static 'js/layout.js' %}"></script>
+<script src="{% static 'js/treinos.js' %}"></script>
 </body>
 </html>
