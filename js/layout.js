@@ -32,7 +32,7 @@ function gravarAuth(auth){
 }
 
 var auth = lerAuth();
-if(!auth) auth = { role:'admin' }; // padrão para demonstração
+// visitante (não logado) mantém acesso de demonstração, mas exibe opções de login
 
 /* ---------- Sidebar ---------- */
 const NAV_PRINCIPAL = [
